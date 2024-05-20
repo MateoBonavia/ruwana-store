@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Banner from "../../public/Banner.png";
+import Collections from "@/components/Collections";
 
 export default function Home() {
   return (
@@ -11,6 +12,8 @@ export default function Home() {
         height={1000}
         className="w-screen"
       />
+
+      <Collections />
     </>
   );
 }
