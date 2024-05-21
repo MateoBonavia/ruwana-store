@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Banner from "../../public/Banner.png";
 import Collections from "@/components/Collections";
+import ProductList from "@/components/ProductList";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
       />
 
       <Collections />
+      <ProductList />
     </>
   );
 }
