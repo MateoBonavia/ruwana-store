@@ -8,7 +8,7 @@ export const GET = async (req: NextRequest) => {
     const { userId } = auth();
 
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     await connectToDB();
@@ -23,7 +23,10 @@ export const GET = async (req: NextRequest) => {
 
     return NextResponse.json(user, { status: 200 });
   } catch (error) {
-    console.log("[users_GET", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+    console.log("[users_GET]", error);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 };

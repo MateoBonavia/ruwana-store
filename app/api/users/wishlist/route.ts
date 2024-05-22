@@ -8,7 +8,7 @@ export const POST = async (req: NextRequest) => {
     const { userId } = auth();
 
     if (!userId) {
-      return new NextResponse("Unauthorized", { status: 401 });
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     await connectToDB();
@@ -16,13 +16,17 @@ export const POST = async (req: NextRequest) => {
     const user = await User.findOne({ clerkId: userId });
 
     if (!user) {
-      return new NextResponse("User not found", { status: 404 });
+      // En caso de que el usuario no exista (fallo en la creación previa)
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     const { productId } = await req.json();
 
     if (!productId) {
-      return new NextResponse("Product Id required", { status: 400 });
+      return NextResponse.json(
+        { message: "Product Id required" },
+        { status: 400 }
+      );
     }
 
     const isLiked = user.wishlist.includes(productId);
@@ -31,13 +35,18 @@ export const POST = async (req: NextRequest) => {
       // Dislike
       user.wishlist = user.wishlist.filter((id: string) => id !== productId);
     } else {
+      // Like
       user.wishlist.push(productId);
     }
 
     await user.save();
+
     return NextResponse.json(user, { status: 200 });
-  } catch (error) {
-    console.log("[wishlist_POST]", error);
-    return new NextResponse("Internal Server Error", { status: 500 });
+  } catch (err) {
+    console.log("[wishlist_POST]", err);
+    return NextResponse.json(
+      { message: "Internal Server Error" },
+      { status: 500 }
+    );
   }
 };
