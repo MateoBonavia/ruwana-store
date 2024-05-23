@@ -31,7 +31,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
     if (user) {
       getUser();
     }
-  }, []);
+  }, [user]);
 
   const handleLike = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -53,7 +53,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
         setIsLiked(updatedUser.wishlist.includes(product._id));
       }
     } catch (error) {
-      console.log("[wishlist_POST]", error);
+      console.log("[wishlist_POST]", error, signedInUser);
     }
   };
 
