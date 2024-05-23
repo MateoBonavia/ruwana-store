@@ -9,3 +9,10 @@ export const getProducts = async () => {
   const products = await fetch(`http://localhost:3000/api/products`);
   return await products.json();
 };
+
+export const getProductDetails = async (productId: string) => {
+  const product = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/products/${productId}`
+  );
+  return await product.json();
+};
