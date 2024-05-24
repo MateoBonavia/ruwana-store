@@ -7,9 +7,15 @@ import React from "react";
 const Cart = () => {
   const cart = useCart();
 
+  const total = cart.cartItems.reduce(
+    (acc, cartItem) => acc + cartItem.item.price * cartItem.quantity,
+    0
+  );
+  const totalRounded = parseFloat(total.toFixed(2));
+
   return (
-    <div className="flex gap-20 py-16 px-10">
-      <div className="w-2/3">
+    <div className="flex gap-20 py-16 px-10 max-lg:flex-col">
+      <div className="w-2/3 max-lg:w-full">
         <p className="text-heading3-bold">Carrito de compras</p>
         <hr className="my-6" />
 
@@ -18,7 +24,7 @@ const Cart = () => {
         ) : (
           <div>
             {cart.cartItems.map((cartItem) => (
-              <div className="w-full flex hover:bg-grey-1 px-6 py-5 items-center justify-between">
+              <div className="w-full flex max-sm:flex-col max-sm:gap-3 hover:bg-grey-1 px-6 py-5 items-center max-sm:items-start justify-between">
                 <div className="flex items-center">
                   <Image
                     src={cartItem.item.media[0]}
@@ -37,6 +43,8 @@ const Cart = () => {
                     {cartItem.size && (
                       <p className="text-small-medium">{cartItem.size}</p>
                     )}
+
+                    <p className="text-small-medium">$ {cartItem.item.price}</p>
                   </div>
                 </div>
 
@@ -60,6 +68,24 @@ const Cart = () => {
             ))}
           </div>
         )}
+      </div>
+
+      <div className="w-1/3 max-lg:w-full flex flex-col gap-8 bg-grey-1 rounded-lg px-4 py-5">
+        <p className="text-heading4-bold pb-4">
+          Cantidad{" "}
+          <span>{`(${cart.cartItems.length} ${
+            cart.cartItems.length > 1 ? "Productos" : "Producto"
+          })`}</span>
+        </p>
+
+        <div className="flex justify-between text-body-semibold">
+          <span>Total</span>
+          <span>$ {totalRounded}</span>
+        </div>
+
+        <button className="border rounded-lg text-body-bold bg-white py-3 w-full hover:bg-black hover:text-white">
+          Comprar
+        </button>
       </div>
     </div>
   );
