@@ -4,9 +4,12 @@ import { useUser } from "@clerk/nextjs";
 import { MinusCircle, PlusCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import { Wallet } from "@mercadopago/sdk-react";
+import React, { useState } from "react";
 
 const Cart = () => {
+  const [preferenceId, setPreferenceId] = useState<string | null>(null);
+
   const router = useRouter();
   const { user } = useUser();
   const cart = useCart();
@@ -34,11 +37,19 @@ const Cart = () => {
           body: JSON.stringify({ cartItems: cart.cartItems, customer }),
         });
         const data = await res.json();
-        window.location.href = data.url;
+        console.log("[checkout_DATA]", data);
+        // window.location.href = data.url;
       }
     } catch (error) {
-      console.log("[checkout_POST", error);
+      console.log("[checkout_POST]", error);
     }
+  };
+
+  const handleBuy = async () => {
+    const id = await handleCheckout();
+    // if (id) {
+    //   setPreferenceId(id);
+    // }
   };
 
   return (
@@ -113,10 +124,18 @@ const Cart = () => {
 
         <button
           className="border rounded-lg text-body-bold bg-white py-3 w-full hover:bg-black hover:text-white"
-          onClick={handleCheckout}
+          onClick={handleBuy}
         >
           Proceder al pago
         </button>
+        <div className="border rounded-lg text-body-bold bg-white py-3 w-full hover:bg-black hover:text-white">
+          {preferenceId && (
+            <Wallet
+              initialization={{ preferenceId: preferenceId }}
+              customization={{ texts: { valueProp: "smart_option" } }}
+            />
+          )}
+        </div>
       </div>
     </div>
   );
