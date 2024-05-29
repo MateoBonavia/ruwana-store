@@ -34,11 +34,17 @@ const Cart = () => {
       } else {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
           method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-Type": "application/json",
+          },
           body: JSON.stringify({ cartItems: cart.cartItems, customer }),
         });
-        const data = await res.json();
-        console.log("[checkout_DATA]", data);
+        console.log(await res.json());
+        // const data = await res.json();
+        // console.log("[checkout_DATA]", data);
         // window.location.href = data.url;
+        // return data;
       }
     } catch (error) {
       console.log("[checkout_POST]", error);

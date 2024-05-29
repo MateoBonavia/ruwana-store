@@ -6,7 +6,7 @@ export const getCollections = async () => {
 };
 
 export const getProducts = async () => {
-  const products = await fetch(`http://localhost:3000/api/products`);
+  const products = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`);
   return await products.json();
 };
 
