@@ -4,15 +4,9 @@ import { useUser } from "@clerk/nextjs";
 import { MinusCircle, PlusCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Wallet, initMercadoPago } from "@mercadopago/sdk-react";
 import React, { useState } from "react";
 
 const Cart = () => {
-  initMercadoPago(`${process.env.NEXT_PUBLIC_MP_PUBLIC_KEY}`, {
-    locale: "es-AR",
-  });
-  const [preferenceId, setPreferenceId] = useState<string | null>(null);
-
   const router = useRouter();
   const { user } = useUser();
   const cart = useCart();
@@ -35,27 +29,9 @@ const Cart = () => {
       if (!user) {
         router.push("/sign-in");
       } else {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ cartItems: cart.cartItems, customer }),
-        });
-        const data = await res.json();
-        console.log("[checkout_DATA]", data);
-        // window.location.href = data.url;
-        return data.id;
       }
     } catch (error) {
       console.log("[checkout_POST]", error);
-    }
-  };
-
-  const handleBuy = async () => {
-    const id = await handleCheckout();
-    if (id) {
-      setPreferenceId(id);
     }
   };
 
@@ -129,18 +105,9 @@ const Cart = () => {
           <span>$ {totalRounded}</span>
         </div>
 
-        <button
-          className="border rounded-lg text-body-bold bg-white py-3 w-full hover:bg-black hover:text-white"
-          onClick={handleBuy}
-        >
+        <button className="border rounded-lg text-body-bold bg-white py-3 w-full hover:bg-black hover:text-white">
           Proceder al pago
         </button>
-        {preferenceId && (
-          <Wallet
-            initialization={{ preferenceId: preferenceId }}
-            customization={{ texts: { valueProp: "smart_option" } }}
-          />
-        )}
       </div>
     </div>
   );
