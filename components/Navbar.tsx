@@ -7,8 +7,10 @@ import Logo from "../public/Logo.png";
 import { UserButton, useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import useCart from "@/lib/hooks/useCart";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const { user } = useUser();
   const cart = useCart();
 
@@ -44,7 +46,12 @@ const Navbar = () => {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <Search className="cursor-pointer h-4 w-4 hover:text-red-1" />
+        <button
+          disabled={query === ""}
+          onClick={() => router.push(`/search/${query}`)}
+        >
+          <Search className="cursor-pointer h-4 w-4 hover:text-red-1" />
+        </button>
       </div>
 
       <div className="relative flex gap-3 items-center">
