@@ -4,7 +4,7 @@ import { useUser } from "@clerk/nextjs";
 import { MinusCircle, PlusCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 const Cart = () => {
   const router = useRouter();
@@ -34,10 +34,11 @@ const Cart = () => {
           body: JSON.stringify({ cartItems: cart.cartItems, customer }),
         });
         const data = await res.json();
-        window.location.href = data.url;
+        window.location.href = data.sandbox_init_point;
+        console.log(data);
       }
     } catch (error) {
-      console.log("[checkout_POST", error);
+      console.log("[checkout_POST]", error);
     }
   };
 

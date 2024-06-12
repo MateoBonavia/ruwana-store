@@ -4,12 +4,16 @@ import { useRouter } from "next/navigation";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const HeartFavorite = ({ product }: { product: ProductType }) => {
+interface HeartFavoriteProps {
+  product: ProductType;
+  updateSignedInUser?: (updatedUser: UserType) => void;
+}
+
+const HeartFavorite = ({ product, updateSignedInUser }: HeartFavoriteProps) => {
   const router = useRouter();
   const { user } = useUser();
 
   const [loading, setLoading] = useState(false);
-  const [signedInUser, setSignedInUser] = useState<UserType | null>(null);
   const [isLiked, setIsLiked] = useState(false);
 
   const getUser = async () => {
@@ -17,7 +21,6 @@ const HeartFavorite = ({ product }: { product: ProductType }) => {
       setLoading(true);
       const res = await fetch("/api/users");
       const data = await res.json();
-      setSignedInUser(data);
       setIsLiked(data.wishlist.includes(product._id));
       setLoading(false);
     } catch (error) {
@@ -46,11 +49,11 @@ const HeartFavorite = ({ product }: { product: ProductType }) => {
           body: JSON.stringify({ productId: product._id }),
         });
         const updatedUser = await res.json();
-        setSignedInUser(updatedUser);
         setIsLiked(updatedUser.wishlist.includes(product._id));
+        updateSignedInUser && updateSignedInUser(updatedUser);
       }
     } catch (error) {
-      console.log("[wishlist_POST]", error, signedInUser);
+      console.log("[wishlist_POST]", error);
     }
   };
 
