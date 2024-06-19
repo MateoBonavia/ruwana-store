@@ -1,10 +1,12 @@
 "use client";
+import CustomSheet from "@/components/CustomSheet";
+import ShippingForm from "@/components/ShippingForm";
 import useCart from "@/lib/hooks/useCart";
+
 import { useUser } from "@clerk/nextjs";
 import { MinusCircle, PlusCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
 
 const Cart = () => {
   const router = useRouter();
@@ -110,6 +112,12 @@ const Cart = () => {
         <div className="flex justify-between text-body-semibold">
           <span>Total</span>
           <span>$ {totalRounded}</span>
+        </div>
+
+        <div className="flex justify-between text-body-semibold">
+          <CustomSheet title="Dirección de envió">
+            <ShippingForm />
+          </CustomSheet>
         </div>
 
         <button

@@ -61,3 +61,14 @@ type OrderItemType = {
   quantity: number;
   _id: string;
 };
+
+type GeoapifySuggestion = {
+  properties: {
+    place_id: string;
+    formatted: string;
+  };
+};
+
+type GeoapifyResponse = {
+  features: GeoapifySuggestion[];
+};
