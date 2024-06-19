@@ -1,6 +1,7 @@
 "use client";
 import CustomSheet from "@/components/CustomSheet";
 import ShippingForm from "@/components/ShippingForm";
+import { Checkbox } from "@/components/ui/checkbox";
 import useCart from "@/lib/hooks/useCart";
 
 import { useUser } from "@clerk/nextjs";
@@ -118,6 +119,11 @@ const Cart = () => {
           <CustomSheet title="Dirección de envió">
             <ShippingForm />
           </CustomSheet>
+
+          <div className="flex gap-2 items-center">
+            <Checkbox />
+            <span>Retiro por sucursal</span>
+          </div>
         </div>
 
         <button
