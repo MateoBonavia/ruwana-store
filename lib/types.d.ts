@@ -61,3 +61,8 @@ type OrderItemType = {
   quantity: number;
   _id: string;
 };
+
+type shippingAddressType = {
+  address: string;
+  additionalComments?: string;
+};

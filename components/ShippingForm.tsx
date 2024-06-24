@@ -13,7 +13,11 @@ type GeoapifySuggestion = {
   };
 };
 
-const ShippingForm = () => {
+interface ShippingFormProps {
+  setShippingData: (value: string) => void;
+}
+
+const ShippingForm: React.FC<ShippingFormProps> = ({ setShippingData }) => {
   const { control, handleSubmit, setValue: setFormValue } = useForm();
   const [suggestions, setSuggestions] = useState<GeoapifySuggestion[]>([]);
   const [open, setOpen] = useState(false);
@@ -60,6 +64,7 @@ const ShippingForm = () => {
 
   const onSubmit = (data: any) => {
     console.log(data);
+    setShippingData(data);
   };
 
   return (
@@ -104,7 +109,11 @@ const ShippingForm = () => {
               )}
               <div>
                 <label>Comentarios adicionales</label>
-                <Textarea />
+                <Textarea
+                  onChange={(e) => {
+                    setFormValue("additionalComments", e.target.value);
+                  }}
+                />
               </div>
             </div>
           )}

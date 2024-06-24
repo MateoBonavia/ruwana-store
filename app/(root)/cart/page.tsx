@@ -8,11 +8,15 @@ import { useUser } from "@clerk/nextjs";
 import { MinusCircle, PlusCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Cart = () => {
   const router = useRouter();
   const { user } = useUser();
   const cart = useCart();
+  const [shippingData, setShippingData] = useState<shippingAddressType | {}>(
+    {}
+  );
 
   const total = cart.cartItems.reduce(
     (acc, cartItem) => acc + cartItem.item.price * cartItem.quantity,
@@ -117,7 +121,7 @@ const Cart = () => {
 
         <div className="flex justify-between text-body-semibold">
           <CustomSheet title="Dirección de envió">
-            <ShippingForm />
+            <ShippingForm setShippingData={setShippingData} />
           </CustomSheet>
 
           <div className="flex gap-2 items-center">
