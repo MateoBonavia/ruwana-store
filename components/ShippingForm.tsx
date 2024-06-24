@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { Popover, PopoverContent } from "@/components/ui/popover";
 import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
@@ -14,7 +14,7 @@ type GeoapifySuggestion = {
 };
 
 interface ShippingFormProps {
-  setShippingData: (value: string) => void;
+  setShippingData: Dispatch<SetStateAction<shippingAddressType | null>>;
 }
 
 const ShippingForm: React.FC<ShippingFormProps> = ({ setShippingData }) => {
