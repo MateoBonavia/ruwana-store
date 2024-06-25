@@ -1,15 +1,22 @@
 "use client";
+import CustomSheet from "@/components/CustomSheet";
+import ShippingForm from "@/components/ShippingForm";
+import { Checkbox } from "@/components/ui/checkbox";
 import useCart from "@/lib/hooks/useCart";
+
 import { useUser } from "@clerk/nextjs";
 import { MinusCircle, PlusCircle, Trash } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Cart = () => {
   const router = useRouter();
   const { user } = useUser();
   const cart = useCart();
+  const [shippingData, setShippingData] = useState<shippingAddressType | null>(
+    null
+  );
 
   const total = cart.cartItems.reduce(
     (acc, cartItem) => acc + cartItem.item.price * cartItem.quantity,
@@ -23,6 +30,14 @@ const Cart = () => {
     name: user?.fullName,
   };
 
+  const onSelectCheckbox = (e: boolean) => {
+    if (e) {
+      setShippingData({ address: "Retiro por sucursal" });
+    } else {
+      setShippingData(null);
+    }
+  };
+
   const handleCheckout = async () => {
     try {
       // Crear función para proceder al pago ⬇
@@ -31,11 +46,14 @@ const Cart = () => {
       } else {
         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/checkout`, {
           method: "POST",
-          body: JSON.stringify({ cartItems: cart.cartItems, customer }),
+          body: JSON.stringify({
+            cartItems: cart.cartItems,
+            customer,
+            shippingData,
+          }),
         });
         const data = await res.json();
         window.location.href = data.sandbox_init_point;
-        console.log(data);
       }
     } catch (error) {
       console.log("[checkout_POST]", error);
@@ -112,9 +130,25 @@ const Cart = () => {
           <span>$ {totalRounded}</span>
         </div>
 
+        <div className="flex justify-between text-body-semibold">
+          <CustomSheet title="Dirección de envió">
+            <ShippingForm setShippingData={setShippingData} />
+          </CustomSheet>
+
+          <div className="flex gap-2 items-center">
+            <Checkbox onCheckedChange={(e) => onSelectCheckbox(e as boolean)} />
+            <span>Retiro por sucursal</span>
+          </div>
+        </div>
+
         <button
-          className="border rounded-lg text-body-bold bg-white py-3 w-full hover:bg-black hover:text-white"
+          className={`border rounded-lg text-body-bold bg-white py-3 w-full ${
+            shippingData === null
+              ? "opacity-40"
+              : "opacity-100 hover:bg-black hover:text-white"
+          }`}
           onClick={handleCheckout}
+          disabled={shippingData === null ? true : false}
         >
           Proceder al pago
         </button>
