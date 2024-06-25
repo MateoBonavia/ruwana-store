@@ -5,6 +5,7 @@ import { Textarea } from "./ui/textarea";
 import { Input } from "./ui/input";
 import { useForm, Controller } from "react-hook-form";
 import useDebounce from "@/lib/hooks/useDebounce";
+import { SheetClose } from "./ui/sheet";
 
 type GeoapifySuggestion = {
   properties: {
@@ -45,7 +46,6 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ setShippingData }) => {
             `https://api.geoapify.com/v1/geocode/autocomplete?text=${debouncedInputValue}&apiKey=${apiKey}`
           );
           const data = await res.json();
-          console.log(data);
           setSuggestions(data.features ?? []);
           setOpen(data.features.length > 0);
         } catch (error) {
@@ -63,7 +63,6 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ setShippingData }) => {
   }, [debouncedInputValue]);
 
   const onSubmit = (data: any) => {
-    console.log(data);
     setShippingData(data);
   };
 
@@ -119,12 +118,14 @@ const ShippingForm: React.FC<ShippingFormProps> = ({ setShippingData }) => {
           )}
         />
       </div>
-      <button
-        type="submit"
-        className="border rounded-lg text-body-bold bg-white py-3 w-32 hover:bg-black hover:text-white"
-      >
-        Enviar
-      </button>
+      <SheetClose asChild>
+        <button
+          type="submit"
+          className="border rounded-lg text-body-bold bg-white py-3 w-32 hover:bg-black hover:text-white"
+        >
+          Enviar
+        </button>
+      </SheetClose>
     </form>
   );
 };

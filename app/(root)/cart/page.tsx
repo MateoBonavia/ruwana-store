@@ -54,7 +54,6 @@ const Cart = () => {
         });
         const data = await res.json();
         window.location.href = data.sandbox_init_point;
-        console.log(data);
       }
     } catch (error) {
       console.log("[checkout_POST]", error);

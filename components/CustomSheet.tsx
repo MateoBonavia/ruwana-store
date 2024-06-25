@@ -24,8 +24,8 @@ const CustomSheet: React.FC<TitleProp> = ({ title, children }) => {
         <SheetContent className="bg-grey-1">
           <SheetHeader>
             <SheetTitle className="text-heading4-bold pb-4">{title}</SheetTitle>
-            <SheetDescription>{children}</SheetDescription>
           </SheetHeader>
+          <SheetDescription>{children}</SheetDescription>
         </SheetContent>
       </Sheet>
     </div>
